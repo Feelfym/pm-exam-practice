@@ -403,15 +403,22 @@ document.addEventListener('DOMContentLoaded', function() {
         
         sections.forEach((section, index) => {
             const sectionTitle = section.querySelector('h2').textContent;
-            const headingInputs = section.querySelectorAll('.heading-inputs input');
+            const mainHeadingInput = section.querySelector('.main-heading');
+            const subSections = section.querySelectorAll('.sub-section');
             const textarea = section.querySelector('.answer-textarea');
             
             const headings = {
-                main: headingInputs[0].value || '',
-                sub1: headingInputs[1].value || '',
-                sub2: headingInputs[2].value || '',
-                sub3: headingInputs[3].value || ''
+                main: mainHeadingInput.value || ''
             };
+            
+            subSections.forEach((subSection, subIndex) => {
+                const subHeadingInput = subSection.querySelector('.sub-heading');
+                const subtopicInputs = subSection.querySelectorAll('.subtopic');
+                
+                headings[`sub${subIndex + 1}`] = subHeadingInput.value || '';
+                headings[`sub${subIndex + 1}_topic1`] = subtopicInputs[0].value || '';
+                headings[`sub${subIndex + 1}_topic2`] = subtopicInputs[1].value || '';
+            });
             
             data.push({
                 title: sectionTitle,
@@ -567,7 +574,87 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    function exportForAIGrading() {
+        const data = collectData();
+        let aiPromptText = `以下は、プロジェクトマネージャ試験の午後Ⅱ（論述式試験）の回答です。以下の採点基準に従って評価し、改善点を具体的に指摘してください：
+
+【採点基準】
+1. 章立て・構成: 適切な見出しや章立てがされているか
+2. 段落設定: 論理的な段落構成になっているか
+3. 内容の具体性: 抽象的でなく、具体的な内容が記述されているか
+4. 設問への適合性: テーマや設問の要求に適切に答えているか
+5. 問題文の反映: 問題文の内容や条件を正しく反映しているか
+6. 関連性: 設問に関係のない無関係な内容や自慢話になっていないか
+7. 回答の妥当性: 問題の意図を正しく理解し、適切に答えているか
+
+【評価方法】
+- 各項目を5段階（優秀:5、良好:4、普通:3、要改善:2、不十分:1）で評価
+- 各設問ごとに総合コメントを記述
+- 全体的な改善提案を提示
+
+===========================================
+
+`;
+        
+        data.forEach((section, index) => {
+            aiPromptText += `## ${section.title}\n\n`;
+            
+            if (section.headings.main) {
+                aiPromptText += `### 設定した見出し構成\n`;
+                aiPromptText += `**大見出し:** ${section.headings.main}\n`;
+                
+                let hasSubHeadings = false;
+                if (section.headings.sub1 || section.headings.sub2 || section.headings.sub3) {
+                    aiPromptText += `**小見出し:**\n`;
+                    if (section.headings.sub1) {
+                        aiPromptText += `- 1.1 ${section.headings.sub1}\n`;
+                        // サブトピックがある場合
+                        if (section.headings.sub1_topic1 || section.headings.sub1_topic2) {
+                            if (section.headings.sub1_topic1) aiPromptText += `  - (1) ${section.headings.sub1_topic1}\n`;
+                            if (section.headings.sub1_topic2) aiPromptText += `  - (2) ${section.headings.sub1_topic2}\n`;
+                        }
+                    }
+                    if (section.headings.sub2) {
+                        aiPromptText += `- 1.2 ${section.headings.sub2}\n`;
+                        if (section.headings.sub2_topic1 || section.headings.sub2_topic2) {
+                            if (section.headings.sub2_topic1) aiPromptText += `  - (1) ${section.headings.sub2_topic1}\n`;
+                            if (section.headings.sub2_topic2) aiPromptText += `  - (2) ${section.headings.sub2_topic2}\n`;
+                        }
+                    }
+                    if (section.headings.sub3) {
+                        aiPromptText += `- 1.3 ${section.headings.sub3}\n`;
+                        if (section.headings.sub3_topic1 || section.headings.sub3_topic2) {
+                            if (section.headings.sub3_topic1) aiPromptText += `  - (1) ${section.headings.sub3_topic1}\n`;
+                            if (section.headings.sub3_topic2) aiPromptText += `  - (2) ${section.headings.sub3_topic2}\n`;
+                        }
+                    }
+                    hasSubHeadings = true;
+                }
+                aiPromptText += '\n';
+            }
+            
+            if (section.content) {
+                aiPromptText += `### 回答内容\n`;
+                aiPromptText += section.content + '\n\n';
+            } else {
+                aiPromptText += `### 回答内容\n（未記入）\n\n`;
+            }
+            
+            aiPromptText += '---\n\n';
+        });
+        
+        aiPromptText += `【採点をお願いします】
+上記の回答について、各採点基準に沿って詳細な評価とフィードバックをお願いします。
+特に、プロジェクトマネージャとしての実務経験や知識が適切に反映されているか、
+論述式試験として求められる論理的構成になっているかを重点的に評価してください。`;
+        
+        const currentDate = new Date().toISOString().split('T')[0];
+        const filename = `PM試験AI採点用_${currentDate}.txt`;
+        downloadFile(aiPromptText, filename, 'text/plain');
+    }
+
     document.getElementById('exportMd').addEventListener('click', exportAsMarkdown);
     document.getElementById('exportTxt').addEventListener('click', exportAsText);
+    document.getElementById('exportAI').addEventListener('click', exportForAIGrading);
     document.getElementById('clearAll').addEventListener('click', clearAllData);
 });
