@@ -81,6 +81,7 @@ pm-exam-practice/
 ├── index.html          # メインHTML
 ├── style.css           # スタイルシート
 ├── script.js           # JavaScript機能
+├── LICENSE             # MITライセンス
 └── README.md           # このファイル
 ```
 
