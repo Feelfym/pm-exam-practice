@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自分のプロジェクト - モジュール作成 | プロジェクトマネージャ試験</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .navigation {
+            background: white;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .nav-link.active {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .project-form {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+        }
+        
+        .form-section h3 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        
+        .form-textarea {
+            min-height: 60px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .export-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .export-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .char-info {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .help-text {
+            font-size: 0.75rem;
+            color: #27ae60;
+            margin-top: 2px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .project-form {
+                padding: 20px;
+            }
+            
+            .export-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ナビゲーション -->
+        <nav class="navigation">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">📝 論述練習</a>
+                <a href="project.html" class="nav-link active">📊 プロジェクト管理</a>
+            </div>
+        </nav>
+
+        <header>
+            <h1>自分のプロジェクト - モジュール作成</h1>
+        </header>
+
+        <main>
+            <!-- プロジェクト情報フォーム -->
+            <div class="project-form">
+                <div class="form-section">
+                    <h3>基本情報</h3>
+                    <div class="form-group">
+                        <label for="projectName">プロジェクト名</label>
+                        <input type="text" id="projectName" class="form-input" placeholder="例：顧客管理システム刷新プロジェクト" maxlength="100">
+                        <div class="char-info">最大100文字</div>
+                        <div class="help-text">論述で参照しやすい具体的な名称を設定してください</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectPeriod">期間</label>
+                        <input type="text" id="projectPeriod" class="form-input" placeholder="例：2023年4月〜2024年3月（12ヶ月）" maxlength="100">
+                        <div class="char-info">最大100文字</div>
+                        <div class="help-text">開始時期、終了時期、全体期間を明記</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>プロジェクト体制</h3>
+                    <div class="form-group">
+                        <label for="teamComposition">チーム構成</label>
+                        <textarea id="teamComposition" class="form-input form-textarea" placeholder="例：プロジェクトマネージャ1名、システムエンジニア3名、プログラマ5名、テスタ2名、業務担当者2名" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">役割別の人数構成を具体的に記載</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="roleAssignment">役割分担</label>
+                        <textarea id="roleAssignment" class="form-input form-textarea" placeholder="例：私（PM）：全体統制・進捗管理・品質管理、リーダ：技術面の統制・メンバ指導、SE：要件定義・設計・テスト" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">各役職の具体的な責任範囲を明記</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="organizationStructure">組織体制</label>
+                        <textarea id="organizationStructure" class="form-input form-textarea" placeholder="例：ユーザ部門（業務部）、IT部門（システム部）、外部協力会社（開発ベンダ）の3者構成" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">社内外の組織構造と連携体制</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>プロジェクト規模</h3>
+                    <div class="form-group">
+                        <label for="budgetScale">予算規模</label>
+                        <textarea id="budgetScale" class="form-input form-textarea" placeholder="例：総予算3,000万円（開発費2,000万円、インフラ費500万円、運用保守費500万円）" maxlength="300"></textarea>
+                        <div class="char-info">最大300文字</div>
+                        <div class="help-text">総予算と内訳を記載（具体的金額は適宜調整）</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="humanResources">人的リソース</label>
+                        <textarea id="humanResources" class="form-input form-textarea" placeholder="例：総工数120人月（要件定義10人月、基本設計15人月、詳細設計20人月、製造40人月、テスト35人月）" maxlength="300"></textarea>
+                        <div class="char-info">最大300文字</div>
+                        <div class="help-text">フェーズ別の工数配分を具体的に記載</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="systemScale">システム規模</label>
+                        <textarea id="systemScale" class="form-input form-textarea" placeholder="例：15機能、50画面、データベーステーブル数30、外部システム連携3システム" maxlength="300"></textarea>
+                        <div class="char-info">最大300文字</div>
+                        <div class="help-text">機能数、画面数、DB規模など具体的な数値</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>背景・経緯</h3>
+                    <div class="form-group">
+                        <label for="problemIssues">課題・問題</label>
+                        <textarea id="problemIssues" class="form-input form-textarea" placeholder="例：既存システムの老朽化、保守性の悪化、業務効率の低下、セキュリティリスクの増大" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">プロジェクト開始前に存在していた具体的な課題</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="solutionNeed">解決必要性</label>
+                        <textarea id="solutionNeed" class="form-input form-textarea" placeholder="例：事業拡大に伴う処理量増加への対応、法改正対応、競合他社との差別化" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">なぜその課題を解決する必要があったかの背景</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectGenesis">プロジェクト発足経緯</label>
+                        <textarea id="projectGenesis" class="form-input form-textarea" placeholder="例：経営層からの指示、業務部門からの強い要望、システム監査での指摘事項" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">どのような経緯でプロジェクトが開始されたか</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>目標設定</h3>
+                    <div class="form-group">
+                        <label for="businessGoals">業務目標</label>
+                        <textarea id="businessGoals" class="form-input form-textarea" placeholder="例：業務処理時間30%短縮、データ入力ミス90%削減、月次処理の自動化" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">業務面での具体的な改善目標（数値目標含む）</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="systemGoals">システム目標</label>
+                        <textarea id="systemGoals" class="form-input form-textarea" placeholder="例：応答速度2秒以内、稼働率99.9%以上、セキュリティ強化（不正アクセス防止）" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">システム品質・性能面での具体的な目標値</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectGoals">プロジェクト目標</label>
+                        <textarea id="projectGoals" class="form-input form-textarea" placeholder="例：予算内での完遂、品質基準の達成、計画通りのスケジュール遵守、ノウハウの組織内蓄積" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">プロジェクト管理面での目標（QCD+その他）</div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>特徴・独自性</h3>
+                    <div class="form-group">
+                        <label for="technicalFeatures">技術的特徴</label>
+                        <textarea id="technicalFeatures" class="form-input form-textarea" placeholder="例：クラウドファースト、マイクロサービス アーキテクチャ、AI機能の導入、API連携の活用" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">採用した技術面での特徴や革新性</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="managementFeatures">管理手法の特徴</label>
+                        <textarea id="managementFeatures" class="form-input form-textarea" placeholder="例：アジャイル開発手法の導入、DevOps の実践、ユーザ参加型の要件定義" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">プロジェクト管理・開発手法での工夫点</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessFeatures">業務面の特徴</label>
+                        <textarea id="businessFeatures" class="form-input form-textarea" placeholder="例：業務プロセス再設計（BPR）の実施、他社との差別化機能、業界初の取り組み" maxlength="400"></textarea>
+                        <div class="char-info">最大400文字</div>
+                        <div class="help-text">業務面での独自性や革新的な取り組み</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- エクスポート機能 -->
+            <div class="export-section">
+                <h3>プロジェクト情報のエクスポート</h3>
+                <div class="export-actions">
+                    <button id="exportProjectMarkdown" class="export-btn">📝 Markdownでエクスポート</button>
+                    <button id="exportProjectText" class="export-btn">📄 テキストでエクスポート</button>
+                    <button id="exportProjectJson" class="export-btn">💾 JSONでエクスポート</button>
+                    <button id="clearProjectData" class="export-btn clear-btn">🗑️ 全クリア</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="project.js"></script>
+</body>
+</html>
