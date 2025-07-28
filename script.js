@@ -13,16 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
         
         document.querySelectorAll('.question-section').forEach((section, index) => {
             const textarea = section.querySelector('.answer-textarea');
-            const headingInputs = section.querySelectorAll('.heading-inputs input');
+            const mainHeadingInput = section.querySelector('.main-heading');
+            const subSections = section.querySelectorAll('.sub-section');
             
             const questionId = textarea.id;
+            const headings = {
+                main: mainHeadingInput.value || ''
+            };
+            
+            subSections.forEach((subSection, subIndex) => {
+                const subHeadingInput = subSection.querySelector('.sub-heading');
+                const subtopicInputs = subSection.querySelectorAll('.subtopic');
+                
+                headings[`sub${subIndex + 1}`] = subHeadingInput.value || '';
+                headings[`sub${subIndex + 1}_topic1`] = subtopicInputs[0].value || '';
+                headings[`sub${subIndex + 1}_topic2`] = subtopicInputs[1].value || '';
+            });
+            
             data.questions[questionId] = {
-                headings: {
-                    main: headingInputs[0].value || '',
-                    sub1: headingInputs[1].value || '',
-                    sub2: headingInputs[2].value || '',
-                    sub3: headingInputs[3].value || ''
-                },
+                headings: headings,
                 content: textarea.value || ''
             };
         });
@@ -42,14 +51,22 @@ document.addEventListener('DOMContentLoaded', function() {
             Object.keys(data.questions).forEach(questionId => {
                 const questionData = data.questions[questionId];
                 const section = document.querySelector(`#${questionId}`).closest('.question-section');
-                const headingInputs = section.querySelectorAll('.heading-inputs input');
+                const mainHeadingInput = section.querySelector('.main-heading');
+                const subSections = section.querySelectorAll('.sub-section');
                 const textarea = section.querySelector('.answer-textarea');
                 
-                // 見出しの復元
-                headingInputs[0].value = questionData.headings.main || '';
-                headingInputs[1].value = questionData.headings.sub1 || '';
-                headingInputs[2].value = questionData.headings.sub2 || '';
-                headingInputs[3].value = questionData.headings.sub3 || '';
+                // 大見出しの復元
+                mainHeadingInput.value = questionData.headings.main || '';
+                
+                // 小見出しとサブトピックの復元
+                subSections.forEach((subSection, subIndex) => {
+                    const subHeadingInput = subSection.querySelector('.sub-heading');
+                    const subtopicInputs = subSection.querySelectorAll('.subtopic');
+                    
+                    subHeadingInput.value = questionData.headings[`sub${subIndex + 1}`] || '';
+                    subtopicInputs[0].value = questionData.headings[`sub${subIndex + 1}_topic1`] || '';
+                    subtopicInputs[1].value = questionData.headings[`sub${subIndex + 1}_topic2`] || '';
+                });
                 
                 // 本文の復元
                 textarea.value = questionData.content || '';
@@ -293,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         handleInput();
     });
     
-    const headingInputs = document.querySelectorAll('.main-heading, .sub-heading');
+    const headingInputs = document.querySelectorAll('.main-heading, .sub-heading, .subtopic');
     headingInputs.forEach(input => {
         input.addEventListener('input', function() {
             if (this.value.length > this.maxLength) {
@@ -485,30 +502,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 見出し転記機能
     function insertHeadings(section) {
-        const headingInputs = section.querySelectorAll('.heading-inputs input');
         const textarea = section.querySelector('.answer-textarea');
+        const mainHeadingInput = section.querySelector('.main-heading');
+        const subSections = section.querySelectorAll('.sub-section');
         
-        const mainHeading = headingInputs[0].value.trim();
-        const subHeadings = [
-            headingInputs[1].value.trim(),
-            headingInputs[2].value.trim(),
-            headingInputs[3].value.trim()
-        ].filter(heading => heading !== '');
+        const mainHeading = mainHeadingInput.value.trim();
         
-        if (!mainHeading && subHeadings.length === 0) {
-            alert('見出しが入力されていません。');
-            return;
-        }
-        
+        let hasContent = mainHeading !== '';
         let headingsText = '';
         
         if (mainHeading) {
             headingsText += '1. ' + mainHeading + '\n';
         }
         
-        subHeadings.forEach((subHeading, index) => {
-            headingsText += '1.' + (index + 1) + ' ' + subHeading + '\n';
+        subSections.forEach((subSection, index) => {
+            const subHeadingInput = subSection.querySelector('.sub-heading');
+            const subtopicInputs = subSection.querySelectorAll('.subtopic');
+            
+            const subHeading = subHeadingInput.value.trim();
+            const subtopics = Array.from(subtopicInputs).map(input => input.value.trim()).filter(text => text !== '');
+            
+            if (subHeading) {
+                hasContent = true;
+                headingsText += '1.' + (index + 1) + ' ' + subHeading + '\n';
+                
+                // サブトピックがある場合は追加
+                subtopics.forEach((subtopic, subIndex) => {
+                    headingsText += '  (' + (subIndex + 1) + ') ' + subtopic + '\n';
+                });
+            }
         });
+        
+        if (!hasContent) {
+            alert('見出しが入力されていません。');
+            return;
+        }
         
         if (headingsText) {
             if (textarea.value && !textarea.value.endsWith('\n')) {

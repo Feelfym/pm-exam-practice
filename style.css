@@ -192,12 +192,32 @@ header h1 {
     background-color: #f8f9fa;
 }
 
+.sub-section {
+    margin-bottom: 8px;
+}
+
 .sub-heading {
     font-size: 0.85rem;
     padding: 6px;
     border: 1px solid #bdc3c7;
     border-radius: 4px;
     background-color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.subtopic-group {
+    display: grid;
+    gap: 3px;
+    margin-left: 12px;
+}
+
+.subtopic {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+    border: 1px solid #d5dbdb;
+    border-radius: 3px;
+    background-color: #f8f9fa;
+    color: #555;
 }
 
 .insert-headings-btn {
@@ -226,7 +246,8 @@ header h1 {
 }
 
 .main-heading:focus,
-.sub-heading:focus {
+.sub-heading:focus,
+.subtopic:focus {
     outline: none;
     border-color: #2980b9;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
@@ -485,5 +506,14 @@ header h1 {
     .sub-heading {
         font-size: 0.8rem;
         padding: 5px;
+    }
+    
+    .subtopic {
+        font-size: 0.7rem;
+        padding: 3px 5px;
+    }
+    
+    .subtopic-group {
+        margin-left: 8px;
     }
 }
