@@ -574,6 +574,75 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // クリアボタンのイベントリスナーを追加
+    document.querySelectorAll('.clear-section-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const sectionLetter = this.getAttribute('data-section');
+            clearSection(sectionLetter);
+        });
+    });
+
+    // セクションクリア機能
+    function clearSection(sectionLetter) {
+        if (!confirm(`設問${sectionLetter}の入力内容をすべてクリアしますか？`)) {
+            return;
+        }
+
+        const sectionMap = {
+            'A': 'questionA',
+            'B': 'questionB', 
+            'C': 'questionC'
+        };
+        
+        const textareaId = sectionMap[sectionLetter];
+        const section = document.querySelector(`#${textareaId}`).closest('.question-section');
+        
+        // 見出し入力欄をクリア
+        const headingInputs = section.querySelectorAll('.main-heading, .sub-heading, .subtopic');
+        headingInputs.forEach(input => {
+            input.value = '';
+        });
+        
+        // テキストエリアをクリア
+        const textarea = section.querySelector('.answer-textarea');
+        textarea.value = '';
+        
+        // 文字数カウンターを更新
+        updateCharCount(textarea);
+        
+        // ローカルストレージからデータを削除
+        clearSectionFromStorage(sectionLetter);
+        
+        console.log(`設問${sectionLetter}の入力内容をクリアしました`);
+    }
+
+    // ローカルストレージから特定セクションのデータを削除
+    function clearSectionFromStorage(sectionLetter) {
+        const sectionMap = {
+            'A': 'questionA',
+            'B': 'questionB',
+            'C': 'questionC'
+        };
+        
+        const textareaId = sectionMap[sectionLetter];
+        
+        // テキストエリアのデータを削除
+        localStorage.removeItem(textareaId);
+        
+        // 見出しデータを削除
+        const headingKeys = [
+            `${sectionLetter}_main_heading`,
+            `${sectionLetter}_sub_heading_1`, `${sectionLetter}_sub_heading_2`, `${sectionLetter}_sub_heading_3`,
+            `${sectionLetter}_subtopic_1_1`, `${sectionLetter}_subtopic_1_2`,
+            `${sectionLetter}_subtopic_2_1`, `${sectionLetter}_subtopic_2_2`,
+            `${sectionLetter}_subtopic_3_1`, `${sectionLetter}_subtopic_3_2`
+        ];
+        
+        headingKeys.forEach(key => {
+            localStorage.removeItem(key);
+        });
+    }
+
     function exportForAIGrading() {
         const data = collectData();
         let aiPromptText = `以下は、プロジェクトマネージャ試験の午後Ⅱ（論述式試験）の回答です。以下の採点基準に従って評価し、改善点を具体的に指摘してください：
