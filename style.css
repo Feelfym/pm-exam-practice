@@ -233,6 +233,7 @@ header h1 {
     border: 2px solid #3498db;
     border-radius: 4px;
     background-color: #f8f9fa;
+    width: 100%;
 }
 
 .sub-section {
@@ -246,6 +247,7 @@ header h1 {
     border-radius: 4px;
     background-color: #ffffff;
     margin-bottom: 4px;
+    width: 100%;
 }
 
 .subtopic-group {
@@ -261,6 +263,7 @@ header h1 {
     border-radius: 3px;
     background-color: #f8f9fa;
     color: #555;
+    width: 100%;
 }
 
 .insert-headings-btn {
