@@ -535,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // サブトピックがある場合は追加
                 subtopics.forEach((subtopic, subIndex) => {
-                    headingsText += '  (' + (subIndex + 1) + ') ' + subtopic + '\n';
+                    headingsText += '(' + (subIndex + 1) + ') ' + subtopic + '\n';
                 });
             }
         });
