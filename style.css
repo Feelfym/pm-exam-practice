@@ -266,8 +266,13 @@ header h1 {
     width: 100%;
 }
 
-.insert-headings-btn {
+.section-buttons {
     margin-top: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.insert-headings-btn {
     padding: 6px 12px;
     background: linear-gradient(135deg, #9b59b6, #8e44ad);
     color: white;
@@ -280,6 +285,19 @@ header h1 {
     box-shadow: 0 3px 10px rgba(155, 89, 182, 0.3);
 }
 
+.clear-section-btn {
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+}
+
 .insert-headings-btn:hover {
     background: linear-gradient(135deg, #8e44ad, #732d91);
     transform: translateY(-2px);
@@ -289,6 +307,17 @@ header h1 {
 .insert-headings-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
+}
+
+.clear-section-btn:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+.clear-section-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
 }
 
 .main-heading:focus,
